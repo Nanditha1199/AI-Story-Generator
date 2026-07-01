@@ -93,3 +93,48 @@ length = st.slider(
 )
 
 idea = st.text_area("✍️ Enter Story Idea")
+# -----------------------------
+# GENERATE STORY
+# -----------------------------
+if st.button("✨ Generate Story"):
+
+    if not name or not idea:
+        st.warning("Please enter all required fields!")
+    else:
+        with st.spinner("Creating your story... ✍️"):
+
+            prompt = f"""
+Write a highly creative, emotional, and immersive story.
+
+Genre: {genre}
+Mood: {mood}
+Main character: {name}
+Story idea: {idea}
+Length: around {length} words
+
+Rules:
+- Do NOT use headings like Beginning/Middle/Ending.
+- Write naturally like a real novel.
+- Add dialogues and descriptions.
+- Make it emotional and engaging.
+- End the story beautifully according to the selected mood.
+"""
+
+            try:
+                response = model.generate_content(prompt)
+                story = response.text
+
+                st.success("🎉 Story Generated Successfully!")
+
+                st.subheader("📖 Your Story")
+                st.write(story)
+
+                st.download_button(
+                    "📥 Download Story",
+                    story,
+                    file_name="ai_story.txt",
+                    mime="text/plain"
+                )
+
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
